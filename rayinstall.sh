@@ -16,12 +16,11 @@ then
 fi
 
 
-ray11=`kubectl -n ray-system get pod --selector=app.kubernetes.io/component=kuberay-operator`
+ray11=`kubectl -n ray-system get pod --selector=app.kubernetes.io/component=kuberay-operator | wc -l`
 ray11s="$?"
-
-if [[ (( $ray11s -eq 0 )) ]]
+if [[ (( $ray11 -gt 0 )) ]]
 then
-  status $ray11s ${ray11}
+  status $ray11s $ray11
 else
   ray1=`kubectl create -k "github.com/ray-project/kuberay/ray-operator/config/default?ref=v0.4.0&timeout=90s"`
   ray1s="$?"
@@ -29,14 +28,14 @@ else
   status $ray1s $ray1
 fi
 
-ray10=`kubectl get raycluster`
+ray10=`kubectl get raycluster | wc -l`
 ray10s="$?"
 
-if [[ (( $ray10s -eq 0 )) ]]
+if [[ (( $ray10 -gt 0 )) ]]
 then
 ray=0
 raya=0
-status $ray10s $ray10
+#status $ray10s $ray10
 else 
 ray2=`kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/master/ray-operator/config/samples/ray-cluster.autoscaler.yaml`
 ray2s="$?"
@@ -47,8 +46,12 @@ fi
 
 if [[ (( $ray -eq 0 )) && (( $raya -eq 0 )) ]]
 then
+ray32=`kubectl get raycluster`
+echo "$ray32"
+ray31=`kubectl -n ray-system get pod --selector=app.kubernetes.io/component=kuberay-operator`	
+echo "$ray31"
 ray3=`kubectl get pods --selector=ray.io/cluster=raycluster-autoscaler`
-echo "ray3 is $ray3"
+echo "$ray3"
 ray3s="$?"
 fi
 
