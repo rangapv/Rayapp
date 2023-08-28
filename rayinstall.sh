@@ -37,7 +37,7 @@ ray=0
 raya=0
 #status $ray10s $ray10
 else 
-ray2=`kubectl apply -f https://raw.githubusercontent.com/rangapv/Rayapp/rayauto.yaml`
+ray2=`kubectl apply -f https://raw.githubusercontent.com/rangapv/Rayapp/main/rayauto.yaml`
 #ray2=`kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/master/ray-operator/config/samples/ray-cluster.autoscaler.yaml`
 ray2s="$?"
 raya=0
