@@ -16,7 +16,7 @@ then
 fi
 
 
-ray11=`kubectl -n ray-system get pod --selector=app.kubernetes.io/component=kuberay-operator | wc -l`
+ray11=`kubectl get pod --selector=app.kubernetes.io/component=kuberay-operator --all-namespaces | wc -l`
 ray11s="$?"
 if [[ ( "$ray11" -gt 0 ) ]]
 then
@@ -28,7 +28,7 @@ else
   status "$ray1s" "$ray1"
 fi
 
-ray10=`kubectl get raycluster | wc -l`
+ray10=`kubectl get raycluster --all-namespaces | wc -l`
 ray10s="$?"
 
 if [[ (( $ray10 -gt 0 )) ]]
@@ -67,6 +67,20 @@ fi
 
 }
 
+raystat() {
+
+
+ray11=`kubectl get pod --selector=app.kubernetes.io/component=kuberay-operator --all-namespaces`
+ray11s="$?"
+echo "$ray11"
+
+
+ray10=`kubectl get raycluster --all-namespaces`
+ray10s="$?"
+echo "$ray10"
+
+
+}
 
 status() {
 
@@ -82,4 +96,14 @@ fi
 }
 
 
-inst
+
+
+if [[ ( $1 = "inst" ) ]]
+then
+	inst
+elif [[ ( $1 = "raystat" ) ]]
+then
+	raystat
+else
+	echo "usage: ./rayapp {inst/raystat}"
+fi
