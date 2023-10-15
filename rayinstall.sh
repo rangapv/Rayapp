@@ -69,7 +69,7 @@ fi
 
 raystat() {
 
-
+echo "The status of rayapp is "
 ray11=`kubectl get pod --selector=app.kubernetes.io/component=kuberay-operator --all-namespaces`
 ray11s="$?"
 echo "$ray11"
